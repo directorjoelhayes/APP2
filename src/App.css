@@ -1,0 +1,161 @@
+nav {
+  font-family: monospace;
+  padding: .5rem 1rem;
+  font-size: xx-large;
+  letter-spacing: 1px;
+  background-color: rgb(40, 44, 52);
+  color: white;
+  border-bottom: white 2px solid;
+}
+
+a {
+  color: rgb(40, 44, 52);
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  color: rgb(40, 44, 52);
+}
+
+li {
+  float: left;
+  padding-right: 20px;
+  color: rgb(40, 44, 52);
+}
+
+.navhome {
+  color: white;
+  padding-right: 30px;
+  float: right;
+}
+
+.navhome:hover{
+  color: white;
+  
+}
+
+.navlagen {
+  color: white;
+}
+
+.navbar-toggler {
+  border: none;
+  color: white;
+}
+
+
+.nav-link{
+  float: left;
+  font-size: 60%;
+  }
+
+.nav-item{
+  padding-right: 20px;
+  }
+
+
+
+
+
+h2 {
+  text-transform: uppercase;
+  padding-bottom: 50px;
+  letter-spacing: 4px;
+  text-decoration: underline;
+}
+
+p {
+  font-style: oblique;
+  padding-left: 20px;
+}
+
+form {
+  font-size: large;
+  padding-top: 20px;
+  padding-bottom: 50px;
+  padding-left: 50px;
+
+}
+
+.dropdown {
+  font-size: large;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  padding-left: 50px;
+  }
+
+.breedteberekening {
+  padding-top: 50px;
+}
+
+.breedteinput {
+  font-size: large;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  padding-left: 50px;  
+}
+
+button {
+  background-color: white;
+  color: rgb(40, 44, 52);
+  border: 2px solid transparent;
+  transition-duration: 0.4s;
+}
+button:hover {
+  background-color: rgb(40, 44, 52);
+  color: white;
+  border: 1px solid white;
+}
+
+
+
+
+
+  
+
+.grid-container {
+  display: grid;
+  padding: 10px;
+  grid-template-columns: 40% 60%;
+  color: white;
+  font-family: monospace;
+}
+
+
+.grid-links {
+  grid-column: 1;
+
+}
+
+.grid-TypeMateriaal {
+  background-color: transparent;
+  
+}
+
+.grid-rechts {
+  grid-column: 2;
+
+}
+
+
+.dropdown .nav-link {color:#fff; text-decoration: none;}
+.dropdown .dropdown-menu a{color: #000; text-decoration: none;}
+.dropdown .btn:active {background: rgb(100, 100, 100); color:#fff;}
+.dropdown .btn:focus {background: rgb(100, 100, 100); color:#fff;}
+.dropdown-menu .dropdown-item {display: inline-block; width: 100%; padding: 10px 5px;}
+.container .dropdown .dropdown-menu a:hover
+{
+  color: #fff;
+  background-color: rgb(100, 100, 100);
+  border-color: #fff;
+}
+
+
+.btn.btn-primary {background: rgb(100, 100, 100); color:#fff;}
+.btn.btn-primary:hover {background: #fff; color:#000;}
+
+
+p.paddingTop{ padding-top: 40px;}
+

@@ -1,0 +1,113 @@
+body {
+  background-color: rgb(40, 44, 52);
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 50%;
+
+}
+
+canvas {
+  background-color: white;
+  border: 2px solid black;
+  width: 500px;
+  height: 500px;
+}
+
+
+img {
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  display: block;
+  border-radius: 10px;
+
+}
+
+
+.afbeelding{
+  opacity: 1;
+  transition: 1s ease;
+  backface-visibility: hidden;
+
+}
+
+
+.grid {
+  opacity: 0.7;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50% 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+  margin-top: 80px;
+  column-gap: 20px;
+  row-gap: 20px;  
+
+}
+
+
+.grid > div {
+  background-color: transparent;
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  border: 3px solid white;
+  border-radius: 12px;
+
+}
+
+
+.overflow {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+
+}
+
+
+.button {
+  cursor: pointer;
+  margin: 2px solid transparent;
+  border-radius: 6px;
+  background-color: transparent;
+  color: transparent;
+  padding: 30px 30px;
+
+}
+
+
+.container:hover .button{
+  transition-delay: 3s;
+  transition: 2s;
+  color: white;
+  background-color: rgba(0, 0, 0, 1);
+  margin: 1px solid black;
+  border-radius: 6px;
+  padding: 20px 20px;
+
+}
+
+
+.container:hover .overflow {
+  transition: 2s ease;
+  opacity: 1;
+
+}
+
+
+.container:hover .afbeelding{
+  transition: 1s ease;
+  opacity: 0.5;
+
+}
+
+.container:hover .container{
+  transition: 1s ease;
+  background-color: rgb(121, 118, 118);
+}
