@@ -8,6 +8,8 @@ import mlistReducer from './reducers/mlistreducer'
 import layerReducer from './reducers/layerReducer'
 import layerListReducer from './reducers/layerlistReducer'
 import updateUReducer from './reducers/updateUReducer'
+import materialReducer from './reducers/materialReducer'
+import deleteReducer from './reducers/deleteReducer'
 
 
 
@@ -25,7 +27,9 @@ const reducers = combineReducers({
     layer: layerReducer,
     layerList: layerListReducer,
     update: updateUReducer,
-
+    material: materialReducer,
+    delete: deleteReducer,
+    
 })
 
 

@@ -16,7 +16,7 @@ class Uwaarde extends Component{
     constructor(){
         super();
         this.state = {
-          Uwaarde:'',
+          textOutput:'',
           currentSelection:'',
         };
       }
@@ -30,13 +30,13 @@ class Uwaarde extends Component{
               <div className="breedteberekening">
                   <p>Suggest a width [cm]</p>
                   <div className="breedteinput">
-                    <input id="Breedte" type="number" step = "1">
+                    <input id="Breedte" type="number" step = "1" onchange={()=>this.value = this.value.replace(/, /g,'.')}>
                     </input>
                     <button  onClick={() => this.Uwaarde()}>
                       Confirm
                     </button>
                   </div>
-                  <p>Thermal performance: {this.state.Uwaarde}</p>
+                  <p>{this.state.textOutput}</p>
               </div>
           )
       }
@@ -56,12 +56,17 @@ class Uwaarde extends Component{
       }
 
       //2.calculate U-value
-        var a = parseInt(document.getElementById("Breedte").value); 
+        var a = parseFloat(document.getElementById("Breedte").value); 
         var b = layerList[layerIndex].lambda ;
         var UwaardeBerekening = b / a * 100;
-        var answer = UwaardeBerekening + " W/m\xB2K"
+        var afgerond = UwaardeBerekening.toFixed(3)
+        var answer = afgerond + "W/m\xB2K"
         console.log(answer); 
-        this.setState({Uwaarde: answer}) 
+        if (answer !== 'NaN W/m\xB2K'){
+          this.setState({textOutput: 'Thermal Performance' + answer})
+        }else{
+          this.setState({textOutput: 'This is not a valid thickness'})
+        }
 
       //2.set material and lambda of current layer
         layerList[layerIndex].dikte = parseInt(document.getElementById("Breedte").value)

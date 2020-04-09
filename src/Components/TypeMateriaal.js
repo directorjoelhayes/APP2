@@ -1,11 +1,10 @@
 import React, {Component} from 'react'
 import '../App.css'
 import {connect} from 'react-redux'
-import {choseMType, identifyUser} from '../redux/actions/userAction';
+import {identifyUser} from '../redux/actions/userAction';
 import {Dropdown} from 'react-bootstrap'
 //import DropdownItem from 'react-bootstrap/DropdownItem';
-import {getLambda} from '../redux/actions/userAction'
-
+import {setMaterial} from '../redux/actions/userAction'
 import {saveLayerList} from '../redux/actions/userAction';
 
 export function settingRadioDefault(checkStructuur, checkIsolatie, checkAfwerking){
@@ -32,10 +31,6 @@ class TypeMateriaal extends Component{
       currentLambda: '',
     }
   }
-
-
-
-
 
   dispatchSelectedMaterial = (element) => {
     this.setState({currentSelection: element.materiaal, currentLambda: `The thermal value \u03BB of this material is: ${element.lambda} W/mK`})
@@ -77,9 +72,11 @@ class TypeMateriaal extends Component{
         return(    
 
         <div>
+          <div className ='deleteLayer'>
+            <p className ='deleteLayer' onClick={() => this.deleteLayer()}>[x]</p>
+            <span className = "tooltiptext">Delete layer</span> 
+        </div>
         <h2>{this.props.title}</h2>
-
-
 
         <p>Select a category</p>
         <form>
@@ -117,12 +114,9 @@ class TypeMateriaal extends Component{
 
     selection1(){
       //get typedata
-        dataLink = "https://api.myjson.com/bins/13ry0y";
+        dataLink = "https://api.jsonbin.io/b/5e8ef088cc62be4369c1740d";
         this.setState({selected: dataLink});
-        this.props.choseMType(dataLink)
         this.getData(dataLink)
-
-
 
       //steps for changing layer properties
       //1.set current layerindex
@@ -150,9 +144,8 @@ class TypeMateriaal extends Component{
 
     selection2(){
       //get typedata
-        dataLink = "https://api.myjson.com/bins/ow3wi"
+        dataLink = "https://api.jsonbin.io/b/5e8ef0f9172eb6438960c01c"
         this.setState({selected: dataLink});
-        this.props.choseMType(dataLink)
         this.getData(dataLink)
 
       //steps for changing layer properties
@@ -180,9 +173,8 @@ class TypeMateriaal extends Component{
 
     selection3(){
       //get typedata
-        dataLink = "https://api.myjson.com/bins/jj7gi"
+        dataLink = "https://api.jsonbin.io/b/5e8ef12acc62be4369c1744f"
         this.setState({selected: dataLink});
-        this.props.choseMType(dataLink)
         this.getData(dataLink)
 
       //steps for changing layer properties
@@ -226,8 +218,22 @@ class TypeMateriaal extends Component{
       }
       console.log('Data fetched!')
     }  
+    updateData = async (url) => {
+      const response = await fetch(url) ;
+      const data = await response.json();
+      const totalList = [];
+      data.forEach((element) => {
+        totalList.push(element)
+      })
 
+      if (this.state.options !== totalList) {
+        this.setState({mList: totalList});
+      }
+    }
 
+    deleteLayer(){
+      this.props.deletedata()
+    }
 
     saveFunction(){
       let setStateFromOutside = ()=> {
@@ -249,10 +255,26 @@ class TypeMateriaal extends Component{
         else{
           this.setState({currentSelection: 'please select a material type first'})
         }
-  
-        
+
+        if(layerList[layerIndex].type === 'structuur'){
+          dataLink = "https://api.jsonbin.io/b/5e8ef088cc62be4369c1740d";
+          this.setState({selected: dataLink});
+          this.updateData(dataLink)
+        }
+
+        if(layerList[layerIndex].type === 'isolatie'){
+          dataLink = "https://api.jsonbin.io/b/5e8ef0f9172eb6438960c01c";
+          this.setState({selected: dataLink});
+          this.updateData(dataLink)
+        }
+
+        if(layerList[layerIndex].type === 'afwerking'){
+          dataLink = "https://api.jsonbin.io/b/5e8ef12acc62be4369c1744f";
+          this.setState({selected: dataLink});
+          this.updateData(dataLink)
+        }
       }
-        this.props.getLambda(setStateFromOutside)
+        this.props.setMaterial(setStateFromOutside)
 
         
     }
@@ -263,14 +285,16 @@ class TypeMateriaal extends Component{
 const mapReduxStateToProps = reduxState => ({
     // userdata: reduxState.user.message,
     //typedata: reduxState.type.chosen,
-    lambdadata: reduxState.lambda.result,
 
+    lambdadata: reduxState.lambda.result,
     layerListdata: reduxState.layerList.layerList,
     layerdata: reduxState.layer.layer,
+    materialdata: reduxState.material.material,
+    deletedata: reduxState.delete.delete,
 
 })
 
-export default connect(mapReduxStateToProps, {identifyUser, choseMType, getLambda,saveLayerList})(TypeMateriaal)
+export default connect(mapReduxStateToProps, {identifyUser, setMaterial, saveLayerList})(TypeMateriaal)
 
 
 

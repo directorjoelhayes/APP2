@@ -16,7 +16,8 @@ class Laag extends Component{
         layerName = this.props.layerdata
       }
       else{
-        layerName = 'Laag 1'
+        console.log(this.props.layerdata)
+        layerName = 'Layer 1'
       }
 
 

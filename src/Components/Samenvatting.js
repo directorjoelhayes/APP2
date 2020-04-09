@@ -45,8 +45,8 @@ class Samenvatting extends Component {
       
     } else {
       textOutput ='The total u-value is '
-      valueOutput =  totalU
-      unitOutput = 'W/m\xB2K'
+      valueOutput =  totalU.toFixed
+      unitOutput = ' W/m\xB2K'
     } 
 
 

@@ -31,7 +31,6 @@ class App extends Component{
               </Switch>
             </div>
             <div className="grid-rechts">
-              <img src="detail.png" alt="grafische weergave"></img>
               <Cube></Cube>
             </div>
             <div className="grid-rechts"> 

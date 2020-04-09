@@ -1,4 +1,4 @@
-import {SET_USER, SET_MTYPE, SET_LAMBDA, SET_MLIST, SET_LAYER, SET_LAYERLIST, SET_UPDATEU} from '../types'
+import {SET_USER, SET_MTYPE, SET_LAMBDA, SET_MLIST, SET_LAYER, SET_LAYERLIST, SET_UPDATEU, SET_MATERIAL, SET_DELETE} from '../types'
 
 export const identifyUser = (data) => (dispatch) => {
     console.log('action')
@@ -70,6 +70,20 @@ export const saveLayerList = (data) => (dispatch) => {
 export const updateU = (data) => (dispatch) => {
     dispatch({
         type: SET_UPDATEU,
+        payload: data
+    })
+}
+
+export const setMaterial = (data) => (dispatch) => {
+    dispatch({
+        type: SET_MATERIAL,
+        payload: data
+    })
+}
+
+export const saveDelete = (data) => (dispatch) => {
+    dispatch({
+        type: SET_DELETE,
         payload: data
     })
 }
