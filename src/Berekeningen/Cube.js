@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { PhotoshopPicker } from 'react-color'
-import './style.css'
+import './Cube.css'
 
 class Cube extends Component {
   constructor(props) {
@@ -154,5 +154,6 @@ class Cube extends Component {
     )
   }
 }
+export default Cube;
 const rootElement = document.getElementById("root");
 ReactDOM.render(<Cube />, rootElement);

@@ -7,6 +7,7 @@ import Navbar from './Components/Navbar'
 import Homepagina from './Homepagina';
 import Laag from './Pages/Laag';
 import Samenvatting from './Components/Samenvatting'
+import Cube from './Berekeningen/Cube'
 
 import {Provider} from 'react-redux'
 import store from './redux/store'
@@ -31,6 +32,7 @@ class App extends Component{
             </div>
             <div className="grid-rechts">
               <img src="detail.png" alt="grafische weergave"></img>
+              <Cube></Cube>
             </div>
             <div className="grid-rechts"> 
               <Samenvatting></Samenvatting>
