@@ -1,16 +1,21 @@
-import React, { Component } from "react";
+import React, { Component, Children } from "react";
 import ReactDOM from "react-dom";
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { PhotoshopPicker } from 'react-color'
 import './Cube.css'
+import {connect} from 'react-redux'
+
+var myArray = ['str', 'iso', 'afw']
+var testingMyCubes = [];
+var scene = '';
+var myCubes = [];
 
 class Cube extends Component {
   constructor(props) {
     super(props);
     this.scene = '';
     this.addCube = this.addCube.bind(this);
-    this.removeCube = this.removeCube.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.state = {
       value : '',
@@ -21,16 +26,17 @@ class Cube extends Component {
     }
     this.listItems = (cubes) => {
       return cubes.map((cube,index) =>
-        <div onClick={(e) => this.removeCube(index,cube.name, e)} className="box" key={index}>{cube.name}</div>
+        <div className="box" key={index}>{cube.name}</div>
       );
     }
   }
+
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
   handleColorModalOpen = () => {
-    if(this.state.colorModal == 'closed'){
+    if(this.state.colorModal === 'closed'){
       this.setState({colorModal: 'open', colorTemp : this.state.color});
       } else { 
         this.setState({colorModal: 'closed'});
@@ -51,45 +57,15 @@ class Cube extends Component {
       color : this.state.colorTemp
     });
   }
-  addCube(args){
 
-    var geometry = new THREE.BoxGeometry();
-    var material = new THREE.MeshPhongMaterial( { color: this.state.color } );
-    var cube = new THREE.Mesh( geometry, material );
-    let newWidth = parseFloat(this.state.value);
-    this.setState({
-      value : ''
-    });
-    cube.scale.x = newWidth;
-    cube.scale.y = 100;
-    cube.scale.z = 100;
-    let newPosition = 0;
-    if(this.state.cubes.length > 0){
-      let lastBox = this.state.cubes.length -1;
-      newPosition = this.state.cubes[lastBox].position.x + (this.state.cubes[lastBox].scale.x/2) + (newWidth/2);
-    }
 
-    cube.position.x = newPosition;
-    cube.position.z = -2.5;
-    cube.name = 'box_' + (this.state.cubes.length + 1);
-    this.scene.add( cube );
+  addCube(){
+    
+    var layerList = this.props.layerListdata
+    var myCubes = []
 
-    this.setState({
-      cubes : this.state.cubes.concat( cube )
-    });
-
-  }
-  removeCube(index,name){
-    var array = [...this.state.cubes]; // make a separate copy of the array
-    var selectedObject = this.scene.getObjectByName(name);
-    this.scene.remove( selectedObject );
-    if (index !== -1) {
-      array.splice(index, 1);
-      this.setState({cubes: array});
-    }
-  }
-  componentDidMount() {
-
+    //reset scene from cubes
+    this.scene = '';
     this.scene = new THREE.Scene();
     var canvasWidth = document.getElementById('canvas').clientWidth;
     var camera = new THREE.PerspectiveCamera( 75, canvasWidth/window.innerHeight, 0.1, 1000 );
@@ -105,6 +81,8 @@ class Cube extends Component {
     directionalLight.position.set(0,0,200);
 
     renderer.setSize( canvasWidth, window.innerHeight );
+    
+    //orbit-controls
 
     var controls = new OrbitControls( camera, renderer.domElement );
 
@@ -124,7 +102,36 @@ class Cube extends Component {
       renderer.render( this.scene, camera );
     };
     animate();
+
+    layerList.map((layer, index) =>{
+ 
+    var geometry = new THREE.BoxGeometry();
+    var material = new THREE.MeshPhongMaterial( { color: '#ff5000' } );
+    var cube = new THREE.Mesh( geometry, material );
+    let newWidth = layer.dikte
+ 
+    cube.scale.x = newWidth;
+    cube.scale.y = 100;
+    cube.scale.z = 100;
+    let newPosition = 0;
+    if(this.state.cubes.length > 0){
+      let lastBox = this.state.cubes.length -1;
+      newPosition = this.state.cubes[lastBox].position.x + (this.state.cubes[lastBox].scale.x/2) + (newWidth/2);
+    }
+
+    cube.position.x = newPosition;
+    cube.position.z = -2.5;
+    cube.name = 'mesh_' + (this.state.cubes.length + 1);
+    this.scene.add( cube );
+
+    myCubes.push(cube)
+    myCubes.map((Cube_i) =>{
+      this.scene.add( Cube_i)
+    })
+    })
   }
+
+
   render() {
     return (
       <div className="container">
@@ -138,12 +145,12 @@ class Cube extends Component {
               onAccept={this.handleAccept}
               onCancel={this.handleCancel}/>
             </div>
-            <input type="text" value={this.state.value} onChange={this.handleChange} />
             <div
               className="colorPicker"
               style={{backgroundColor: this.state.color}}
               onClick= {this.handleColorModalOpen}/>
-            <button onClick={this.addCube}>Add Cube</button>
+
+            <button onClick={this.addCube}>Update 3D-view</button>
           </div>
         </div>
         <div className="canvas" id="canvas">
@@ -154,6 +161,12 @@ class Cube extends Component {
     )
   }
 }
-export default Cube;
+
+const mapReduxStateToProps = reduxState => ({
+  layerListdata: reduxState.layerList.layerList,
+})
+
+export default connect(mapReduxStateToProps)(Cube);
+
 const rootElement = document.getElementById("root");
 ReactDOM.render(<Cube />, rootElement);
