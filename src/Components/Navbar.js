@@ -4,15 +4,18 @@ import { Link } from 'react-router-dom';
 import Layer from '../Pages/classLaag'
 import {connect} from 'react-redux'
 import {saveLayerList, saveCurrentLayer, saveDelete} from '../redux/actions/userAction';
+
 import {settingRadioDefault} from '../Components/TypeMateriaal';
 import {settingInputDefault} from '../Berekeningen/Breedte';
 import {getLambda} from '../redux/actions/userAction';
+
 
 var optieStructuur = false
 var optieIsolatie = false
 var optieAfwerking = false
 
 var newIndex = ''
+
 
 var layerList = [new Layer("Layer 1")];
 var currentLayerId= ''
@@ -27,8 +30,18 @@ class Navbar extends Component{
     this.selectLayer = this.selectLayer.bind(this)
   }
 
-  componentDidUpdate(){this.props.materialdata()}
-  componentDidMount(){this.saveFunction()}
+
+      //automatisch huidige materiaal aanduiden
+      componentDidUpdate(){
+        this.props.materialdata()
+      }
+      
+
+    componentDidMount() {
+        this.saveFunction()
+      }
+
+
 
   render(){
 
@@ -36,8 +49,6 @@ class Navbar extends Component{
     this.props.saveLayerList(layerList)
 
     console.log("The new layerlist is",layerList);
-    
-
 
     //function for displaying layers
     var namesList = layerList.map((layer) => {
@@ -86,7 +97,7 @@ class Navbar extends Component{
       `Current layers u-value: ${layerObject.UWaarde}`
   )
 
-  // save clicked layer as current layer
+    // save clicked layer as current layer
     this.props.saveCurrentLayer(layerObject.naam)
     
     currentLayerId = layerObject.naam
@@ -131,6 +142,10 @@ class Navbar extends Component{
     }else{
       settingInputDefault('')
     }
+
+    //automatisch huidige kleur aanduiden
+    this.props.lambdadata()
+    
   }
 
 
@@ -167,12 +182,10 @@ class Navbar extends Component{
 
 
 
-
-
-
   addLayer(){
-    function exampleNameExist(list) {
-      return list.naam === "Layer" + number
+
+    function exampleNameExists(list){
+      return list.naam === "Layer " + number
     }
 
     function nameExists(list){
@@ -181,16 +194,15 @@ class Navbar extends Component{
 
     //add layer
     var number = layerList.length + 1
-
-  
-    if (layerList.indexOf(layerList.find(exampleNameExist))===-1){
-      var exampleName = "Layer" + number
-    }else{
-      number = layerList.length + 2
-      var exampleName = "Layer" + number
+    
+    if (layerList.indexOf(layerList.find(exampleNameExists))===-1){
+      var exampleName = "Layer " + number
+    } else {
+     number =  layerList.length + 2
+      var exampleName = "Layer " + number
     }
 
-    var givenName= prompt("Name of your new layer", exampleName)
+    var givenName= prompt("Name of your new layer", exampleName);
     if (givenName!==null) {
       if (layerList.indexOf(layerList.find(nameExists))===-1) {
         layerList.push(new Layer(givenName));
@@ -198,96 +210,116 @@ class Navbar extends Component{
         alert('Please use a unique layer name')
       }
       
+    
     console.log("The new layerlist is",layerList);
     this.setState({allLayers:layerList}); 
-    }
-        //redux -> save new list +  set new layer as curent layer
-        this.props.saveLayerList(layerList)
-        this.props.saveCurrentLayer(givenName)
     
-        //default: geen type aangeduid
-        settingRadioDefault(false,false,false);
+    //redux -> save new list +  set new layer as curent layer
+    this.props.saveLayerList(layerList)
+    this.props.saveCurrentLayer(givenName)
+
+    //default: geen type aangeduid
+    settingRadioDefault(false,false,false);
+    }
+
+    //automatisch kleur wit aanduiden
+    this.props.lambdadata()
+  }
+
+
+  saveFunction(){
+    let deleteLayer= ()=>{
+      //set current layerindex
+      var layerList = this.props.layerListdata
+      var currentLayerId = this.props.layerdata
+      function searchElement(list){
+       return list.naam === currentLayerId
+     }
+      if (layerList.indexOf(layerList.find(searchElement))!==-1) {
+      layerIndex = layerList.indexOf(layerList.find(searchElement))
+    
+      //delete current layer
+      if(layerList.lengt!==1){
+        layerList.splice(layerIndex,1);
       }
-    saveFunction(){
-      let deleteLayer= ()=>{
-        var layerList = this.props.layerListdata
-        var currentLayerId = this.props.layerListdata
-        function searchElement(list) {
-          return list.naam === currentLayerId
-        }
-        if (layerList.indexOf(layerList.find(searchElement))!==-1){
-          layerIndex = layerList.indexOf(layerList.find(searchElement))
 
-          if (layerList.length!==1){
-            layerList.splice(layerIndex,1);
+      //set new current layer
+      if(layerIndex !==0){
+        newIndex = layerIndex - 1
+      } else {
+        newIndex = 0
+      }
+
+
+      this.props.saveCurrentLayer(layerList[newIndex].naam)
+    
+      currentLayerId = layerList[newIndex].naam
+      function searchElement(list){
+        return list.naam === currentLayerId
+      }
+      var layerIndex = layerList.indexOf(layerList.find(searchElement))
+
+        //automatisch huidige type aanduiden  
+        if(layerList[layerIndex].type !== undefined){
+          if(layerList[layerIndex].type==="structuur"){
+            optieStructuur = true
+            optieIsolatie = false
+            optieAfwerking = false
           }
 
-          if (layerIndex !==0){
-            newIndex = layerIndex -1
-          } else {
-            newIndex = [newIndex]
-          }
+          if(layerList[layerIndex].type==="isolatie"){
+            optieStructuur = false
+            optieIsolatie = true
+            optieAfwerking = false
+         }
 
-          this.props.saveCurrentLayer(layerIndex[newIndex].naam)
-
-          currentLayerId = layerList[newIndex].naam
-          function searchElement(list){
-            return list.naam === currentLayerId
-          }
-
-          var layerIndex = layerList.indexOf(layerList.find(searchElement))
-
-          //automatic current type
-          if (layerList[layerIndex].type !== undefined){
-            if(layerList[layerIndex].type==="structuur"){
-              optieStructuur = true
-              optieIsolatie = false
-              optieAfwerking = false
-            }
-
-            if(layerList[layerIndex].type==="isolatie"){
-              optieStructuur = false
-              optieIsolatie = true
-              optieAfwerking = false
-            }
-
-            if(layerList[layerIndex].type==="isolatie"){
-              optieStructuur = false
-              optieIsolatie = false
-              optieAfwerking = true
-            }
-          }
-          else{
-              optieStructuur = false
-              optieIsolatie = false
-              optieAfwerking = false
-            }
-            settingRadioDefault(optieStructuur,optieIsolatie,optieAfwerking)
-
-            if(layerList[layerIndex].dikte!==undefined){
-              settingInputDefault(layerList[layerIndex].dikte)
-            } else {
-              settingInputDefault('')
-            }
-
-            this.props.saveLayerList(layerList)
-            this.setState({deleteLayer:'done'})
+          if(layerList[layerIndex].type==="afwerking"){
+            optieStructuur = false
+            optieIsolatie = false
+            optieAfwerking = true
           }
         }
 
+        else{
+          optieStructuur = false
+          optieIsolatie = false
+          optieAfwerking = false
+        }
 
-        this.props.saveDelete(deleteLayer)
+        settingRadioDefault(optieStructuur,optieIsolatie,optieAfwerking)
+
+        //automatisch huidige breedte aanduiden
+        if(layerList[layerIndex].dikte!==undefined){
+          settingInputDefault(layerList[layerIndex].dikte)
+        }else{
+          settingInputDefault('')
+        }
+
+      //save layerlist
+      this.props.saveLayerList(layerList)
+      this.setState({deleteLayer:'done'});
+
+      //automatisch huidige kleur aanduiden
+      this.props.lambdadata()
+
+      }
     }
     
+    this.props.saveDelete(deleteLayer)
+  }
+
+
+
+
 }
 
 //export default Navbar;
 
 const mapReduxStateToProps = reduxState => ({
+  lambdadata: reduxState.lambda.result,
 
   layerListdata: reduxState.layerList.layerList,
   layerdata: reduxState.layer.layer,
-  lambdadata: reduxState.lambda.result,
   materialdata: reduxState.material.material,
   deletedata: reduxState.delete.delete
 

@@ -3,6 +3,7 @@ import '../App.css'
 import TypeMateriaal from '../Components/TypeMateriaal'
 import Breedte from '../Berekeningen/Breedte'
 import {connect} from 'react-redux'
+import Colorpicker from '../Components/Colorpicker'
 
 var layerName = ''
 
@@ -28,6 +29,7 @@ class Laag extends Component{
           </div>
           <Breedte className='grid-samenvatting'></Breedte>
 
+            <Colorpicker></Colorpicker>
 
           <div id="navbarLayers"></div>
           

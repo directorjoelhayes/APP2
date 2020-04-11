@@ -1,8 +1,9 @@
-import './Cube.css';
+import '../App.css';
 import React, { Component } from 'react';
 import {PhotoshopPicker} from 'react-color';
 import {saveLayerList} from '../redux/actions/userAction';
 import {connect} from 'react-redux'
+import {getLambda} from '../redux/actions/userAction';
 
 
 var layerIndex = 0
@@ -22,7 +23,9 @@ class Colorpicker extends Component {
 
 }
 
-
+componentDidMount(){
+  this.saveFunction()
+}
 
 //color-picker -> open en dicht, basiskleur
   handleColorModalOpen = () => {
@@ -78,6 +81,45 @@ class Colorpicker extends Component {
     }
 
 
+
+
+
+
+    saveFunction(){
+      let setStateFromOutside = ()=> {
+        this.asyncFunction() 
+      }
+          this.props.getLambda(setStateFromOutside)
+    }
+
+    asyncFunction = async () => {
+
+      const waiting = await 'waiting'
+    
+      //set current layerindex
+      var layerList = this.props.layerListdata
+      var currentLayerId = this.props.layerdata
+      function searchElement(list){
+        return list.naam === currentLayerId
+      }
+      if (layerList.indexOf(layerList.find(searchElement))!==-1) {
+        layerIndex = layerList.indexOf(layerList.find(searchElement))
+      }
+  
+      //set colorpicker on right color
+      this.setState({
+        color : layerList[layerIndex].kleur,
+        colorTemp : layerList[layerIndex].kleur}); 
+    
+    }
+
+
+
+
+
+
+
+
 //Hoe wordt het getoond...
 render() {
  
@@ -113,6 +155,7 @@ render() {
     </div>
   )
   
+  
 
 }
 
@@ -123,16 +166,15 @@ render() {
 
 const mapReduxStateToProps = reduxState => ({
 
+  lambdadata: reduxState.lambda.result,
+
   layerListdata: reduxState.layerList.layerList,
   layerdata: reduxState.layer.layer
 
 })
 
-export default connect(mapReduxStateToProps, {saveLayerList})(Colorpicker);
+export default connect(mapReduxStateToProps, {saveLayerList, getLambda})(Colorpicker);
 
-
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(<Colorpicker />, rootElement)
 
 
 
