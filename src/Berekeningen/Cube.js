@@ -1,9 +1,7 @@
-import '../App.css';
 import React, { Component} from 'react';
 import ReactDOM from "react-dom";
 import * as THREE from "three";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-
 import {connect} from 'react-redux'
 
 
@@ -21,7 +19,7 @@ class Cube extends Component {
       colorModal : 'closed'
     }
 
- 
+
 //kubussen oplijsten
   this.listItems = (cubes) => {
     return cubes.map((cube,index) =>
@@ -40,14 +38,15 @@ handleChange(event) {
 //De eigenschappen van de kubus bepalen, volgens three js, colorpicker, breedte
 
 addCube(){
-  
+
   var layerList = this.props.layerListdata
   var myCubes = []
 
   // //reset scene from cubes
 
   this.scene = new THREE.Scene()
-  var canvasWidth = document.getElementById('canvas').clientWidth;
+  var canvasWidth = document.getElementById('canvas-container').clientWidth;
+  console.log(canvasWidth);
   var camera = new THREE.PerspectiveCamera( 75, canvasWidth/window.innerHeight, 0.1, 1000);
   var renderer = new THREE.WebGLRenderer();
 
@@ -79,10 +78,10 @@ addCube(){
   };
   animate();
 
-  
+
 //make cube for every layer
   layerList.map((layer,index)=>{
-  
+
   var geometry = new THREE.BoxGeometry();
   var material = new THREE.MeshPhongMaterial({color: layer.kleur}); //color: layer.kleur -> nog toe te voegen in array
   var cube = new THREE.Mesh ( geometry, material );
@@ -125,7 +124,8 @@ addCube(){
 componentDidMount() {
 
     this.scene = new THREE.Scene()
-    var canvasWidth = document.getElementById('canvas').clientWidth;
+    var canvasWidth = document.getElementById('canvas-container').clientWidth;
+    console.log(canvasWidth);
     var camera = new THREE.PerspectiveCamera( 75, canvasWidth/window.innerHeight, 0.1, 1000);
     var renderer = new THREE.WebGLRenderer();
 
@@ -160,7 +160,7 @@ componentDidMount() {
 
 //Hoe wordt het getoond...
 render() {
- 
+
   return (
     <div className= "container">
       <div className= "control-bar">
@@ -168,12 +168,10 @@ render() {
           <button onClick={()=>this.addCube()}>Update 3D-view</button>
         </div>
       </div>
-      <div className="canvas" id="canvas">
-        <div ref={ref => (this.mount = ref)}/>
+      <div className="canvas" id="canvas-container" ref={ref => (this.mount = ref)}/>
       </div>
-    </div>
   )
-  
+
 
 }
 
@@ -193,7 +191,3 @@ export default connect(mapReduxStateToProps)(Cube);
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<Cube />, rootElement)
-
-
-
-
